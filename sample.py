@@ -30,9 +30,18 @@ def encode_prompt(prompt):
     return torch.tensor(enc.encode(prompt), dtype=torch.long).unsqueeze(0)
 
 def decode_tokens(token_ids):
-    """Decode token IDs back to text."""
+    """
+    Decode token IDs back to text.
+    
+    Args:
+        token_ids: Tensor of token IDs
+        
+    Returns:
+        str: Decoded text
+    """
     enc = tiktoken.get_encoding("gpt2")
-    return enc.decode(token_ids)
+    # Convert tensor to list before decoding
+    return enc.decode(token_ids.tolist())
 
 def generate_story(prompt, model, max_tokens=200, temperature=0.9, top_k=None, top_p=0.9):
     """
@@ -68,7 +77,7 @@ def generate_story(prompt, model, max_tokens=200, temperature=0.9, top_k=None, t
             top_p=top_p
         )
     
-    generated_text = decode_tokens(generated_ids[0])
+    generated_text = decode_tokens(generated_ids[0])  # Take first batch item
     generation_time = time.time() - t0
     
     logger.debug(

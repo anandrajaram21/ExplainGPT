@@ -6,7 +6,7 @@ import os
 import time
 import math
 import torch
-from model import GPT
+from model.gpt import GPT
 from config.train_tinystories import TrainingConfig
 from utils.logger import setup_logger
 
