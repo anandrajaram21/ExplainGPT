@@ -86,7 +86,8 @@ def prepare_dataset(save_dir=None):
         'n_sequences': 0,     # Number of stories
         'seq_lengths': [],    # Length of each story
         'max_length': 0,      # Longest story length
-        'min_length': float('inf')  # Shortest story length
+        'min_length': float('inf'),  # Shortest story length
+        'unique_tokens': set()  # Track unique tokens
     }
     
     # Process training data
@@ -102,6 +103,7 @@ def prepare_dataset(save_dir=None):
         stats['seq_lengths'].append(processed['len'])
         stats['max_length'] = max(stats['max_length'], processed['len'])
         stats['min_length'] = min(stats['min_length'], processed['len'])
+        stats['unique_tokens'].update(processed['ids'])
     
     # Process validation data
     logger.info("Processing validation split...")
@@ -109,6 +111,7 @@ def prepare_dataset(save_dir=None):
     for item in tqdm(dataset['validation'], desc="Validation split"):
         processed = process_text(item)
         val_data.extend(processed['ids'])
+        stats['unique_tokens'].update(processed['ids'])
     
     # Convert to tensors
     logger.info("Converting to PyTorch tensors...")
@@ -118,10 +121,12 @@ def prepare_dataset(save_dir=None):
     # Save processed data
     train_path = os.path.join(save_dir, 'train.pt')
     val_path = os.path.join(save_dir, 'val.pt')
+    vocab_size_path = os.path.join(save_dir, 'vocab_size.pt')
     
     logger.info("Saving processed data...")
     torch.save(train_data, train_path)
     torch.save(val_data, val_path)
+    torch.save(len(stats['unique_tokens']), vocab_size_path)
     
     # Log final statistics
     avg_seq_length = stats['n_tokens'] / stats['n_sequences']
@@ -129,12 +134,13 @@ def prepare_dataset(save_dir=None):
     logger.info(f"Training set: {len(train_data):,} tokens")
     logger.info(f"Validation set: {len(val_data):,} tokens")
     logger.info(f"Number of stories: {stats['n_sequences']:,}")
+    logger.info(f"Vocabulary size: {len(stats['unique_tokens']):,} tokens")
     logger.info(f"Average story length: {avg_seq_length:.1f} tokens")
     logger.info(f"Shortest story: {stats['min_length']} tokens")
     logger.info(f"Longest story: {stats['max_length']} tokens")
     logger.info(f"Data saved to: {train_path} and {val_path}")
     
-    return train_path, val_path
+    return train_path, val_path, vocab_size_path
 
 if __name__ == '__main__':
     prepare_dataset()
