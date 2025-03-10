@@ -1,5 +1,5 @@
 """
-Common logging configuration for the TinyGPT project.
+Common logging configuration for the ExplainGPT project.
 """
 
 import logging

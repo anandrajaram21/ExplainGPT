@@ -1,5 +1,5 @@
 """
-Text generation script for trained TinyGPT model.
+Text generation script for trained ExplainGPT model.
 Provides interactive story generation with adjustable parameters.
 """
 

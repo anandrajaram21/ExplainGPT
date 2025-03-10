@@ -1,5 +1,5 @@
 """
-Training script for TinyGPT model.
+Training script for ExplainGPT model.
 """
 
 import os

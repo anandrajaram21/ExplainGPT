@@ -1,5 +1,5 @@
 """
-Training Configuration for TinyGPT
+Training Configuration for ExplainGPT
 ---------------------------------
 This module defines the configuration for training a small GPT model on the TinyStories
 dataset. The configuration is optimized for training on consumer GPUs with limited VRAM.
@@ -22,10 +22,10 @@ def _can_use_triton():
         return False
 
 class TrainingConfig:
-    """Configuration for training the TinyGPT model."""
+    """Configuration for training the ExplainGPT model."""
     
     # Wandb configuration
-    wandb_project = "tinygpt"
+    wandb_project = "ExplainGPT"
     wandb_entity = None  # Set to your wandb username/entity
     wandb_log_model = True
     
