@@ -13,6 +13,7 @@ The configuration includes:
 """
 
 import torch
+import os
 
 def _can_use_triton():
     try:
@@ -34,9 +35,17 @@ class TrainingConfig:
     n_head = 4           # Number of attention heads per layer
     n_embd = 128         # Embedding dimension for tokens and positions
     block_size = 64      # Maximum sequence length (context window)
-    vocab_size = 50304   # GPT-2 vocabulary size
+    vocab_size = None    # Will be loaded from processed dataset
     dropout = 0.2        # Dropout probability for regularization
     bias = True          # Whether to use bias terms in linear layers
+
+    def __init__(self):
+        # Load vocabulary size from processed dataset
+        vocab_size_path = os.path.join('data', 'tinystories', 'vocab_size.pt')
+        if os.path.exists(vocab_size_path):
+            self.vocab_size = torch.load(vocab_size_path)
+        else:
+            self.vocab_size = 50304  # Default to GPT-2 vocabulary size
 
     # Training hyperparameters
     batch_size = 12      # Number of sequences per batch
@@ -59,5 +68,6 @@ class TrainingConfig:
     
     # System settings
     device = 'cuda' if torch.cuda.is_available() else 'cpu'  # Training device
+    device = 'mps' if torch.backends.mps.is_available() else 'cpu'
     dtype = 'float16'   # Data type for training (float16 for memory efficiency)
     compile = False     # Whether to use torch.compile (disabled for compatibility)
