@@ -1,6 +1,6 @@
 # ExplainGPT
 
-A project that aims to explain the inner workings of a GPT Model. Includes a simple implementation of a GPT Model trained on the TinyStories dataset.
+A project that aims to explain the inner workings of a GPT Model. Includes a simple implementation of a GPT Model trained on a small dataset.
 
 ## Features
 
