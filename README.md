@@ -75,4 +75,6 @@ ExplainGPT is a project that allows you to interact with language models, visual
 
 ## License
 
-[MIT License](LICENSE)
+This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
+
+Copyright (c) 2025 Anand Rajaram
