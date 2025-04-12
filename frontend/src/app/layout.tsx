@@ -4,6 +4,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
+import CursorProvider from "@/components/cursor-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,15 +38,17 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SidebarProvider>
-            <AppSidebar />
-            <div className="p-4">
-              <SidebarTrigger />
-            </div>
-            <main className="p-4 flex items-center justify-center w-full h-screen">
-              {children}
-            </main>
-          </SidebarProvider>
+          <CursorProvider>
+            <SidebarProvider defaultOpen={false}>
+              <AppSidebar />
+              <div className="w-full flex flex-col">
+                <header className="p-4 flex items-center sticky top-0 z-10 bg-background/80 backdrop-blur-sm">
+                  <SidebarTrigger className="mr-4" />
+                </header>
+                <main>{children}</main>
+              </div>
+            </SidebarProvider>
+          </CursorProvider>
         </ThemeProvider>
       </body>
     </html>
