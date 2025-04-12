@@ -1,6 +1,6 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 from logger import get_logger
-
+import torch
 logger = get_logger(__name__)
 
 def load_model(model_name: str = "distilbert/distilgpt2"):
@@ -15,7 +15,7 @@ def load_model(model_name: str = "distilbert/distilgpt2"):
         )
         
         logger.debug(f"Creating text generation pipeline for {model_name}")
-        generator = pipeline("text-generation", model=model, tokenizer=tokenizer)
+        generator = pipeline("text-generation", model=model, tokenizer=tokenizer, device=0 if torch.cuda.is_available() else -1)
         
         logger.info(f"Successfully loaded model: {model_name}")
         return tokenizer, model, generator
