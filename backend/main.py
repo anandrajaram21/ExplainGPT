@@ -18,6 +18,7 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    tokenizer, model = load_model("anandrajaram21/tinystories-test")
+    tokenizer, model, pipeline = load_model("anandrajaram21/tinystories-test")
     app.state.model = model
     app.state.tokenizer = tokenizer
+    app.state.pipeline = pipeline

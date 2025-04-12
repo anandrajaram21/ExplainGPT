@@ -1,4 +1,4 @@
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 
 
 def load_model(model_name: str = "distilbert/distilgpt2"):
@@ -6,4 +6,5 @@ def load_model(model_name: str = "distilbert/distilgpt2"):
     model = AutoModelForCausalLM.from_pretrained(
         model_name, output_attentions=True, return_dict_in_generate=True
     )
-    return tokenizer, model
+    generator = pipeline("text-generation", model=model, tokenizer=tokenizer)
+    return tokenizer, model, generator

@@ -10,32 +10,25 @@ router = APIRouter()
 
 @router.post("/change_model")
 def change_model(model_name: ModelNameInput, request: Request):
-    tokenizer, model = load_model(model_name.model_name)
+    tokenizer, model, pipeline = load_model(model_name.model_name)
     request.app.state.model = model
     request.app.state.tokenizer = tokenizer
+    request.app.state.pipeline = pipeline
 
     return {"status": 200, "message": "Changed successfully"}
 
 
 @router.post("/generate")
 def generate(prompt: PromptInput, request: Request):
-    model = request.app.state.model
-    tokenizer = request.app.state.tokenizer
+    pipeline = request.app.state.pipeline
 
-    print(model)
-    print(tokenizer)
+    if pipeline is None:
+        return {"status": 400, "message": "Pipeline not found"}
 
-    if model is None:
-        return {"status": 400, "message": "Model not found"}
-    if tokenizer is None:
-        return {"status": 400, "message": "Tokenizer not found"}
+    output = pipeline(prompt.text, max_length=prompt.max_length, num_return_sequences=1)
+    output = output[0]["generated_text"]
 
-    input_ids = tokenizer.encode(prompt.text, return_tensors="pt")
-    output = model.generate(input_ids, max_length=100, num_return_sequences=1)
-    return {
-        "status": 200,
-        "output": tokenizer.decode(output[0], skip_special_tokens=True),
-    }
+    return {"status": 200, "output": output}
 
 
 @router.post("/token_probs")
