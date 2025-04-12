@@ -39,8 +39,10 @@ export default function RootLayout({
         >
           <SidebarProvider>
             <AppSidebar />
-            <main className="p-4">
+            <div className="p-4">
               <SidebarTrigger />
+            </div>
+            <main className="p-4 flex items-center justify-center w-full h-screen">
               {children}
             </main>
           </SidebarProvider>

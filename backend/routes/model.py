@@ -44,6 +44,7 @@ def token_probs(prompt: PromptInput, request: Request):
     tokenizer = request.app.state.tokenizer
 
     input_prompt = prompt.text
+    max_tokens = prompt.max_length
 
     if model is None:
         return {"status": 400, "message": "Model not found"}
@@ -53,7 +54,7 @@ def token_probs(prompt: PromptInput, request: Request):
     inputs = tokenizer([input_prompt], return_tensors="pt")
     outputs = model.generate(
         **inputs,
-        max_new_tokens=5,
+        max_new_tokens=max_tokens,
         return_dict_in_generate=True,
         output_scores=True,
         output_logits=True
