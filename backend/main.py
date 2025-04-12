@@ -1,0 +1,23 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from routes.main import router
+from model.main import load_model
+
+app = FastAPI()
+app.include_router(router)
+
+# Allow CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.on_event("startup")
+async def startup_event():
+    tokenizer, model = load_model("anandrajaram21/tinystories-test")
+    app.state.model = model
+    app.state.tokenizer = tokenizer
