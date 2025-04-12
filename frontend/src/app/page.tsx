@@ -110,7 +110,7 @@ export default function Home() {
             understanding of AI language models.
           </p>
           <Button size="lg" asChild>
-            <Link href="/app">Get Started</Link>
+            <Link href="/playground">Get Started</Link>
           </Button>
         </div>
       </section>

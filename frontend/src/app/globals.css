@@ -122,3 +122,66 @@
 }
 
 /* All custom cursor styling moved to cursor-provider.tsx */
+
+/* Custom styling for range input sliders */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Track styles */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+input[type="range"]::-moz-range-track {
+  height: 8px;
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+/* Thumb styles */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 18px;
+  width: 18px;
+  background: var(--primary);
+  border-radius: 50%;
+  margin-top: -5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 18px;
+  width: 18px;
+  background: var(--primary);
+  border-radius: 50%;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Focus styles */
+input[type="range"]:focus {
+  outline: none;
+}
+
+input[type="range"]:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px var(--background), 0 0 0 6px var(--ring);
+}
+
+input[type="range"]:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 3px var(--background), 0 0 0 6px var(--ring);
+}
+
+/* Hover effects */
+input[type="range"]:hover::-webkit-slider-thumb {
+  background: var(--primary-foreground);
+}
+
+input[type="range"]:hover::-moz-range-thumb {
+  background: var(--primary-foreground);
+}

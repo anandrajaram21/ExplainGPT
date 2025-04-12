@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 import numpy as np
-from schemas import PromptInput, ModelNameInput
+from schemas import PromptInput, ModelNameInput, PlaygroundInput
 from model.main import load_model
 from logger import get_logger
 
@@ -47,6 +47,8 @@ def generate(prompt: PromptInput, request: Request):
     except Exception as e:
         logger.error(f"Error in text generation: {str(e)}", exc_info=True)
         return {"status": 500, "message": f"Error generating text: {str(e)}"}
+
+
 
 
 @router.post("/token_probs")
@@ -128,3 +130,60 @@ def token_probs(prompt: PromptInput, request: Request):
     except Exception as e:
         logger.error(f"Error calculating token probabilities: {str(e)}", exc_info=True)
         return {"status": 500, "message": f"Error calculating token probabilities: {str(e)}"}
+
+
+@router.post("/playground")
+def playground(config: PlaygroundInput, request: Request):
+    logger.info(f"Playground request received with params: temp={config.temperature}, top_k={config.top_k}, top_p={config.top_p}, max_length={config.max_length}")
+    logger.debug(f"Prompt text: {config.text[:50]}...")
+    
+    model = request.app.state.model
+    tokenizer = request.app.state.tokenizer
+
+    if model is None:
+        logger.error("Model not found")
+        return {"status": 400, "message": "Model not found"}
+    if tokenizer is None:
+        logger.error("Tokenizer not found")
+        return {"status": 400, "message": "Tokenizer not found"}
+
+    try:
+        logger.debug("Tokenizing input")
+        inputs = tokenizer([config.text], return_tensors="pt")
+        
+        logger.debug(f"Generating with parameters: temp={config.temperature}, top_k={config.top_k}, top_p={config.top_p}, max_new_tokens={config.max_length}")
+        outputs = model.generate(
+            **inputs,
+            do_sample=True,
+            temperature=config.temperature,
+            top_k=config.top_k,
+            top_p=config.top_p,
+            max_new_tokens=config.max_length,
+            num_return_sequences=config.num_return_sequences,
+            return_dict_in_generate=True
+        )
+        
+        input_length = 1 if model.config.is_encoder_decoder else inputs.input_ids.shape[1]
+        generated_sequences = outputs.sequences[:, input_length:]
+        
+        logger.debug("Decoding generated sequences")
+        generated_texts = []
+        for seq in generated_sequences:
+            generated_text = tokenizer.decode(seq, skip_special_tokens=True)
+            generated_texts.append(generated_text)
+        
+        logger.info(f"Playground generation completed successfully, generated {len(generated_texts)} sequences")
+        return {
+            "status": 200, 
+            "outputs": generated_texts,
+            "parameters": {
+                "temperature": config.temperature,
+                "top_k": config.top_k,
+                "top_p": config.top_p,
+                "max_length": config.max_length,
+                "num_return_sequences": config.num_return_sequences
+            }
+        }
+    except Exception as e:
+        logger.error(f"Error in playground text generation: {str(e)}", exc_info=True)
+        return {"status": 500, "message": f"Error generating text: {str(e)}"}

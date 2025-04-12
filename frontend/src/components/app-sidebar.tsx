@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Calendar,
   Home,
@@ -8,6 +10,7 @@ import {
   ChartBar,
   Code,
 } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
 
 import {
   Sidebar,
@@ -47,6 +50,13 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleNavigation = (url: string) => {
+    router.push(url);
+  };
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -56,11 +66,12 @@ export function AppSidebar() {
               <ModeToggle />
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+                  <SidebarMenuButton
+                    isActive={pathname === item.url}
+                    onClick={() => handleNavigation(item.url)}
+                  >
+                    <item.icon />
+                    <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
