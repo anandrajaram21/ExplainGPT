@@ -1,6 +1,7 @@
 "use client";
 
 import { PageContainer } from "@/components/page-container";
+import { AttentionVisualizer } from "@/components/attention-visualizer";
 
 export default function AttentionPage() {
   return (
@@ -14,10 +15,8 @@ export default function AttentionPage() {
         </p>
       </div>
 
-      <div className="bg-card rounded-xl shadow-md overflow-hidden border w-full p-6">
-        <div className="text-center text-muted-foreground p-12">
-          <p>Attention visualization features coming soon</p>
-        </div>
+      <div className="w-full my-6">
+        <AttentionVisualizer />
       </div>
     </PageContainer>
   );

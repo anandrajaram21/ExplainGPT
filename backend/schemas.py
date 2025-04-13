@@ -30,3 +30,15 @@ class ChatInput(BaseModel):
     temperature: float = Field(default=0.7, ge=0.0, le=2.0)
     max_tokens: int = Field(default=300, ge=1, le=1000)
     stream: bool = Field(default=True)
+
+
+class AttentionInput(BaseModel):
+    text: str = Field(..., description="The input text for attention visualization")
+    
+    
+class AttentionResponse(BaseModel):
+    tokens: List[str] = Field(..., description="Tokenized input text")
+    attention: List = Field(..., description="Attention weights for each layer and head")
+    num_layers: int = Field(..., description="Number of attention layers")
+    num_heads: int = Field(..., description="Number of attention heads per layer")
+    seq_len: int = Field(..., description="Sequence length (number of tokens)")

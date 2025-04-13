@@ -14,8 +14,9 @@ class Settings(BaseSettings):
     CORS_ALLOW_HEADERS: List[str] = ["*"]
     
     # Model Settings
-    DEFAULT_MODEL: str = "anandrajaram21/tinystories-test"
-    
+    # DEFAULT_MODEL: str = "anandrajaram21/tinystories-test"
+    DEFAULT_MODEL: str = "distilbert/distilgpt2"
+
     # Logging Settings
     LOG_LEVEL: str = "INFO"
     

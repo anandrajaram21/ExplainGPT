@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import type { TokenProbability } from "@/lib/api";
+import type { TokenProbability } from "@/lib/api/tokenProbs";
 
 interface TokenProbabilityProps {
   token: string;

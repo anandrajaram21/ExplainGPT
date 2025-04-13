@@ -8,9 +8,9 @@ import { PageContainer } from "@/components/page-container";
 import {
   sendPrompt,
   type TokenProbsResponse,
-  type ApiResponse,
   type PromptRequest,
-} from "@/lib/api";
+} from "@/lib/api/tokenProbs";
+import { ApiResponse } from "@/lib/api/config";
 
 export default function TokenProbsPage() {
   const [tokenData, setTokenData] = useState<TokenProbsResponse | null>(null);

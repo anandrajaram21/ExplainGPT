@@ -1,6 +1,6 @@
 import React from "react";
 import { TokenProbabilityDisplay } from "./token-probability";
-import type { TokenStep } from "@/lib/api";
+import type { TokenStep } from "@/lib/api/tokenProbs";
 
 interface TokenSequenceProps {
   tokenSteps: TokenStep[];

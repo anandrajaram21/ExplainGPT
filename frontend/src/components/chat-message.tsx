@@ -1,6 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { ChatMessage as ChatMessageType } from "@/lib/api";
+import { ChatMessage as ChatMessageType } from "@/lib/api/chat";
 
 interface ChatMessageProps {
   message: ChatMessageType;
