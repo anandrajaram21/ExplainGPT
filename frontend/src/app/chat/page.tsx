@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { useChat } from "@/hooks/use-chat";
 import { ChatMessage } from "@/components/chat-message";
 import { ChatInput } from "@/components/chat-input";
@@ -9,6 +9,16 @@ import { PageContainer } from "@/components/page-container";
 
 export default function ChatPage() {
   const { messages, isLoading, sendMessage, resetChat } = useChat();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Scroll to bottom whenever messages change or during streaming
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isLoading]);
 
   return (
     <PageContainer>
@@ -54,6 +64,7 @@ export default function ChatPage() {
                   }
                 />
               ))}
+              <div ref={messagesEndRef} />
             </div>
           )}
         </div>

@@ -4,15 +4,7 @@ import { useState } from "react";
 import { PageContainer } from "@/components/page-container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-type PlaygroundParams = {
-  text: string;
-  temperature: number;
-  top_k: number;
-  top_p: number;
-  max_length: number;
-  num_return_sequences: number;
-};
+import { PlaygroundParams, generatePlaygroundText } from "@/lib/api/model";
 
 export default function PlaygroundPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,20 +39,14 @@ export default function PlaygroundPage() {
     setActiveTab(0); // Reset to first tab when generating new output
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/model/playground", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(params),
-      });
+      const response = await generatePlaygroundText(params);
 
-      const data = await response.json();
-
-      if (data.status === 200) {
-        setOutput(data.outputs);
+      if (response.data && response.status === 200) {
+        setOutput(response.data.outputs);
       } else {
-        setError(data.message || "An error occurred");
+        setError(
+          response.error || response.data?.message || "An error occurred"
+        );
       }
     } catch (err) {
       setError("Failed to connect to the server");

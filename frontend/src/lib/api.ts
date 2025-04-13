@@ -1,9 +1,17 @@
+/**
+ * This file is maintained for backwards compatibility.
+ * Please import directly from @/lib/api/* for new code.
+ */
+
+// Re-export everything from the new modular API 
+export * from './api/index';
+
 // API helper functions for making requests to the backend
 
 /**
  * Base URL for the backend API
  */
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
 /**
  * Generic type for API responses
@@ -86,7 +94,7 @@ export type ChatResponse = {
  */
 export async function sendPrompt(promptData: PromptRequest): Promise<ApiResponse<TokenProbsResponse>> {
   try {
-    const response = await fetch(`${API_BASE_URL}/model/token_probs`, {
+    const response = await fetch(`${API_BASE_URL}/token_probs/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -119,7 +127,7 @@ export async function sendPrompt(promptData: PromptRequest): Promise<ApiResponse
  */
 export async function sendChatRequest(chatData: ChatRequest): Promise<ApiResponse<ChatResponse>> {
   try {
-    const response = await fetch(`${API_BASE_URL}/model/chat`, {
+    const response = await fetch(`${API_BASE_URL}/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -155,7 +163,7 @@ export async function createChatStream(chatData: ChatRequest): Promise<ReadableS
   const streamData = { ...chatData, stream: true };
   
   try {
-    const response = await fetch(`${API_BASE_URL}/model/chat`, {
+    const response = await fetch(`${API_BASE_URL}/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

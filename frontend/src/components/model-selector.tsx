@@ -2,43 +2,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-/**
- * API function to change the model
- */
-async function changeModel(
-  modelName: string
-): Promise<{ status: number; message: string }> {
-  const API_BASE_URL =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-
-  try {
-    const response = await fetch(`${API_BASE_URL}/model/change_model`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ model_name: modelName }),
-    });
-
-    if (!response.ok) {
-      return {
-        status: response.status,
-        message: `Failed to change model: ${response.statusText}`,
-      };
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return {
-      status: 500,
-      message: `Error changing model: ${
-        error instanceof Error ? error.message : String(error)
-      }`,
-    };
-  }
-}
+import { changeModel } from "@/lib/api/model";
 
 export function ModelSelector() {
   const [modelName, setModelName] = useState<string>("");
@@ -54,7 +18,9 @@ export function ModelSelector() {
 
     try {
       const response = await changeModel(modelName);
-      setMessage(response.message);
+      setMessage(
+        response.data?.message || response.error || "Model changed successfully"
+      );
     } catch (err) {
       setMessage(`Error: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
