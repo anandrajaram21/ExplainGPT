@@ -9,6 +9,7 @@ import {
   Brain,
   ChartBar,
   Code,
+  MessageSquare,
 } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -46,6 +47,11 @@ const items = [
     title: "Playground",
     url: "/playground",
     icon: Code,
+  },
+  {
+    title: "Chat",
+    url: "/chat",
+    icon: MessageSquare,
   },
 ];
 
